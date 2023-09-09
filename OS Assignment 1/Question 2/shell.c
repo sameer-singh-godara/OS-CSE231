@@ -259,40 +259,28 @@ int main ()
         // external commands
 
         else if (!strcmp(argv[0], "dir")){
+            if (argv[1]==NULL){
+                printf("dir: Too few arguments\n");
+                continue;
+            }
             int rc = fork();
             if (rc == 0){
-                // printf("%s\n", argv[2]);
                 strcat(working_directory, "/dir");
                 execv(working_directory, argv);
                 return 0;
             }
             else {
                 wait(0);
-                // for (int i = 0; i<3; i++){
-                // printf("%s\n", argv[i]);
-                // }
-
                 if (argv[2] == NULL && strcmp(argv[1], "-r") != 0 && strcmp(argv[1], "-v") != 0){
                     if (argv[1] == NULL){
-                        // printf("dir: Too few arguments\n");
                     }
                     else {
                         char* directory_name = argv[1];
-                        // int check_dic_created_or_not;
-                        
-                        // DIR* dir = opendir(directory_name);
-                        // if (dir){
-                        //     //
-                        // }
-                        // else {
                         chdir(directory_name);
-                        
-                        // }
                     }
                 }
                 else if (strcmp(argv[1], "-r") == 0){
                     if (argv[2] == NULL){
-                        // printf("dir: Too few arguments\n");
                     }
                     else {                    
                         char* directory_name = argv[2];
@@ -302,18 +290,20 @@ int main ()
                 }
                 else if (strcmp(argv[1], "-v") == 0) {
                      if (argv[2] == NULL){
-                        // printf("dir: Too few arguments\n");
                     }
                     else {
                         char* directory_name = argv[2];
                         chdir(argv[2]);
-
                     }                         
                 }
                 continue;
             }
         }
         else if (!strcmp(argv[0], "date")){
+            if (argv[1]==NULL){
+                printf("date: Too few arguments\n");
+                continue;
+            }
             int rc = fork();
             if (rc == 0){
                 strcat(working_directory, "/date");
