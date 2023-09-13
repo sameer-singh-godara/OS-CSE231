@@ -19,84 +19,103 @@ int main ()
     pid_t pid2;
     pid_t pid3;
 
-    double execution_times[3];
+    double execution_time1, execution_time2, execution_time3;
 
-    struct timespec start_time, end_time;
-    clock_gettime(CLOCK_MONOTONIC, &start_time);
-
+    struct timespec start_time1, start_time2, start_time3, end_time1, end_time2, end_time3;  
     pid1 = fork();
     if (pid1==0){
-        struct sched_param param;
-        param.sched_priority = 0;
-
-        int check_sched_set = sched_setscheduler(0, SCHED_OTHER, &param);
-        if (check_sched_set == -1){
-            perror("sched_scheduler error in process 1\n");
+        pid_t rc = fork();
+        if (!rc){
+            struct sched_param param;
+            param.sched_priority = 0;
+            
+            int check_sched_set = sched_setscheduler(0, SCHED_OTHER, &param);
+            if (check_sched_set == -1){
+                perror("sched_scheduler error in process 1\n");
+                exit(1);
+            }
+            
+            execl("./2", "2", NULL);
+            
+            perror("execl error in proces 1\n");
             exit(1);
         }
-        
-        execl("./2", "2", NULL);
-        
-        perror("execl error in proces 1\n");
-        exit(1);
+        clock_gettime(CLOCK_REALTIME, &start_time1);
+        wait(NULL);
+        clock_gettime(CLOCK_REALTIME, &end_time1);
+        execution_time1 = (end_time1.tv_sec - start_time1.tv_sec) + (end_time1.tv_nsec - start_time1.tv_nsec)/1e9;
+        printf("OTHER time : %lf\n", execution_time1);
+
     }
     else if (pid1<0){
         perror("Process 1 Failed");
         exit(1);
     }
+    else {
+        pid2 = fork();
+        if (pid2==0){
+            pid_t rc = fork();
+            if (!rc){
+                struct sched_param param;
+                param.sched_priority = 1;
 
+                int check_sched_set = sched_setscheduler(0, SCHED_RR, &param);
+                if (check_sched_set == -1){
+                    perror("sched_scheduler error in process 2\n");
+                    exit(1);
+                }
+                
+                execl("./2", "2", NULL);
 
-    pid2 = fork();
-    if (pid2==0){
-        struct sched_param param;
-        param.sched_priority = 1;
+                perror("execl error in proces 2\n");
+                exit(1);
+            }
+            clock_gettime(CLOCK_REALTIME, &start_time2);
+            wait(NULL);
+            clock_gettime(CLOCK_REALTIME, &end_time2);
+            execution_time2 = (end_time2.tv_sec - start_time2.tv_sec) + (end_time2.tv_nsec - start_time2.tv_nsec)/1e9;
+            printf("RR time : %lf\n", execution_time2);
 
-        int check_sched_set = sched_setscheduler(0, SCHED_RR, &param);
-        if (check_sched_set == -1){
-            perror("sched_scheduler error in process 2\n");
+        }
+        else if (pid2<0){
+            perror("Process 2 Failed\n");
             exit(1);
         }
-        
-        execl("./2", "2", NULL);
+        else {
+            pid3 = fork();
+            if (pid3==0){
+                pid_t rc = fork();
+                if (!rc){
+                    struct sched_param param;
+                    param.sched_priority = 1;
 
-        perror("execl error in proces 2\n");
-        exit(1);
-    }
-    else if (pid2<0){
-        perror("Process 2 Failed\n");
-        exit(1);
-    }
+                    int check_sched_set = sched_setscheduler(0, SCHED_FIFO, &param);
+                    if (check_sched_set == -1){
+                        perror("sched_scheduler error in process 3\n");
+                        exit(1);
+                    }
+                    
+                    execl("./2", "2", NULL);
 
-    pid3 = fork();
-    if (pid3==0){
-        struct sched_param param;
-        param.sched_priority = 1;
-
-        int check_sched_set = sched_setscheduler(0, SCHED_FIFO, &param);
-        if (check_sched_set == -1){
-            perror("sched_scheduler error in process 3\n");
-            exit(1);
+                    perror("execl error in proces 3\n");
+                    exit(1);
+                }
+                clock_gettime(CLOCK_REALTIME, &start_time3);
+                waitpid(pid3, NULL, 0);
+                clock_gettime(CLOCK_REALTIME, &end_time3);
+                execution_time3 = (end_time3.tv_sec - start_time3.tv_sec) + (end_time3.tv_nsec - start_time3.tv_nsec)/1e9;
+                printf("FIFO time : %lf\n", execution_time3);
+            }
+            else if (pid3<0){
+                perror("Process 3 Failed");
+                exit(1);
+            }
         }
-        
-        execl("./2", "2", NULL);
-
-        perror("execl error in proces 3\n");
-        exit(1);
-    }
-    else if (pid3<0){
-        perror("Process 3 Failed");
-        exit(1);
     }
 
-    waitpid(pid1, NULL, 0);
-    // printf("pid1\n");
-    waitpid(pid2, NULL, 0);
-    // printf("pid2\n");
-    waitpid(pid3, NULL, 0);
-    // printf("pid3\n");
-
-    clock_gettime(CLOCK_MONOTONIC, &end_time);
-    
+    wait(NULL);
+    wait(NULL);
+    wait(NULL);
 
     return 0;
 }
