@@ -120,8 +120,9 @@ int main ()
         }
     }
 
-    
-
+    // wait(NULL);
+    // wait(NULL);
+    // wait(NULL);
 
 
 
