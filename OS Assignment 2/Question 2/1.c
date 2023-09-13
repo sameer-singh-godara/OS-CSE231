@@ -21,10 +21,10 @@ int main ()
 
     double execution_time1, execution_time2, execution_time3;
 
-    struct timespec start_time1, start_time2, start_time3, end_time1, end_time2, end_time3;  
-    pid1 = fork();
+    struct timespec start_time1, start_time2, start_time3, end_time1, end_time2, end_time3; // defining the datatype of start and end time of each processes
+    pid1 = fork();// fork for process 1
     if (pid1==0){
-        pid_t rc = fork();
+        pid_t rc = fork(); // calling internal fork for caclulating time for completing the process easily
         if (!rc){
             struct sched_param param;
             param.sched_priority = 0;
@@ -43,7 +43,8 @@ int main ()
         clock_gettime(CLOCK_REALTIME, &start_time1);
         wait(NULL);
         clock_gettime(CLOCK_REALTIME, &end_time1);
-        execution_time1 = (end_time1.tv_sec - start_time1.tv_sec) + (end_time1.tv_nsec - start_time1.tv_nsec)/1e9;
+        // calculating time for execution of OTHER process
+        execution_time1 = (end_time1.tv_sec - start_time1.tv_sec) + (double)(end_time1.tv_nsec - start_time1.tv_nsec)/1e9;
         printf("OTHER time : %lf\n", execution_time1);
 
     }
@@ -52,9 +53,9 @@ int main ()
         exit(1);
     }
     else {
-        pid2 = fork();
+        pid2 = fork(); // fork for process 2
         if (pid2==0){
-            pid_t rc = fork();
+            pid_t rc = fork(); // calling internal fork for caclulating time for completing the process easily
             if (!rc){
                 struct sched_param param;
                 param.sched_priority = 1;
@@ -73,7 +74,7 @@ int main ()
             clock_gettime(CLOCK_REALTIME, &start_time2);
             wait(NULL);
             clock_gettime(CLOCK_REALTIME, &end_time2);
-            execution_time2 = (end_time2.tv_sec - start_time2.tv_sec) + (end_time2.tv_nsec - start_time2.tv_nsec)/1e9;
+            execution_time2 = (end_time2.tv_sec - start_time2.tv_sec) + (double)(end_time2.tv_nsec - start_time2.tv_nsec)/1e9;
             printf("RR time : %lf\n", execution_time2);
 
         }
@@ -82,9 +83,9 @@ int main ()
             exit(1);
         }
         else {
-            pid3 = fork();
+            pid3 = fork(); // fork for process 3
             if (pid3==0){
-                pid_t rc = fork();
+                pid_t rc = fork(); // calling internal fork for caclulating time for completing the process easily
                 if (!rc){
                     struct sched_param param;
                     param.sched_priority = 1;
@@ -101,9 +102,9 @@ int main ()
                     exit(1);
                 }
                 clock_gettime(CLOCK_REALTIME, &start_time3);
-                waitpid(pid3, NULL, 0);
+                wait(NULL);
                 clock_gettime(CLOCK_REALTIME, &end_time3);
-                execution_time3 = (end_time3.tv_sec - start_time3.tv_sec) + (end_time3.tv_nsec - start_time3.tv_nsec)/1e9;
+                execution_time3 = (end_time3.tv_sec - start_time3.tv_sec) + (double)(end_time3.tv_nsec - start_time3.tv_nsec)/1e9;
                 printf("FIFO time : %lf\n", execution_time3);
             }
             else if (pid3<0){
@@ -116,6 +117,6 @@ int main ()
     wait(NULL);
     wait(NULL);
     wait(NULL);
-
+    
     return 0;
 }

@@ -18,6 +18,6 @@ int main ()
     // printf("%lld", x);
     for (unsigned long int count = 0; count<x; count++){
     }
-    printf("answer : %li\n", x);
+    // printf("answer : %li\n", x);
     return 0;
 }
