@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 # Initialize empty lists to store data
 indices = []
 times = []
+colors = ['red', 'blue', 'green']
+intSched = ['Others', 'FIFO', 'RR']
+temp_index = [0, 1, 2]
 
 # Read data from the input file
 with open('output.txt', 'r') as file:
@@ -17,11 +20,18 @@ with open('output.txt', 'r') as file:
 plt.ylim(0, 4)
 plt.yticks([i * 0.1 for i in range(41)])
 
+categories = [intSched[i] for i in temp_index]
+
 # Create a bar graph
-plt.bar(indices, times, align='center', alpha=0.7)
-plt.xlabel('Index')
+bars = plt.bar(temp_index, times, align='center', alpha=0.7, color=colors)
+plt.xlabel('Scheduling Process')
+plt.xticks(temp_index, categories)
 plt.ylabel('Time (seconds)')
 plt.title('Execution Time for Each Process')
+
+# Add text annotations on top of the bars
+for bar, time in zip(bars, times):
+    plt.text(bar.get_x() + bar.get_width() / 2, time + 0.05, str(time) + " seconds", ha='center', va='bottom')
 
 # Display the graph
 plt.show()
