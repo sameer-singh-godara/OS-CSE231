@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 indices = []
 times = []
 colors = ['red', 'blue', 'green']
-intSched = ['Others', 'FIFO', 'RR']
+intSched = ['OTHERS', 'FIFO', 'RR']
 temp_index = [0, 1, 2]
+#RED FOR OTHERS
+# BLUE FOR FIFO
+# GREEN FOR RR
 
 # Read data from the input file
 with open('output.txt', 'r') as file:

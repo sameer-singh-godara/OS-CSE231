@@ -56,7 +56,11 @@ int main ()
         execution_time1 = (end_time1.tv_sec - start_time1.tv_sec) + (double)(end_time1.tv_nsec - start_time1.tv_nsec)/1e9;
         executionTimes[SCHED_OTHER] = execution_time1;
         fprintf(file, "%d %lf\n", SCHED_OTHER, executionTimes[SCHED_OTHER]); // Printing output in output.txt
-        printf("OTHER time : %lf\n", execution_time1);
+        printf("Starting time of OTHER : %lf\n", start_time1.tv_sec + (double)(start_time1.tv_nsec/1e9));
+        printf("Ending time of OTHER : %lf\n", end_time1.tv_sec + (double)(end_time1.tv_nsec/1e9));
+        printf("\033[1;31m");
+        printf("Time of execution of OTHER : %lf\n\n", execution_time1);
+        printf("\033[0;0m"); 
 
     }
     else if (pid1<0){
@@ -91,7 +95,11 @@ int main ()
             execution_time2 = (end_time2.tv_sec - start_time2.tv_sec) + (double)(end_time2.tv_nsec - start_time2.tv_nsec)/1e9;
             executionTimes[SCHED_RR] = execution_time2;
             fprintf(file, "%d %lf\n", SCHED_RR, executionTimes[SCHED_RR]); // Printing output in output.txt
-            printf("RR time : %lf\n", execution_time2);
+            printf("Starting time of RR : %lf\n", start_time2.tv_sec + (double)(start_time2.tv_nsec/1e9));
+            printf("Ending time of RR : %lf\n", end_time2.tv_sec + (double)(end_time2.tv_nsec/1e9));
+            printf("\033[1;32m");
+            printf("Time of execution of RR : %lf\n\n", execution_time2);
+            printf("\033[0;0m"); 
 
         }
         else if (pid2<0){
@@ -127,7 +135,11 @@ int main ()
                 execution_time3 = (end_time3.tv_sec - start_time3.tv_sec) + (double)(end_time3.tv_nsec - start_time3.tv_nsec)/1e9;
                 executionTimes[SCHED_FIFO] = execution_time3;
                 fprintf(file, "%d %lf\n", SCHED_FIFO, executionTimes[SCHED_FIFO]); // Printing output in output.txt
-                printf("FIFO time : %lf\n", execution_time3);
+                printf("Starting time of FIFO : %lf\n", start_time3.tv_sec + (double)(start_time3.tv_nsec/1e9));
+                printf("Ending time of FIFO : %lf\n", end_time3.tv_sec + (double)(end_time3.tv_nsec/1e9));
+                printf("\033[1;34m");
+                printf("Time of execution of FIFO : %lf\n\n", execution_time3);
+                printf("\033[0;0m"); 
             }
             else if (pid3<0){
                 perror("Process 3 Failed");
