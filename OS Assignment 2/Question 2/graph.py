@@ -34,4 +34,5 @@ for bar, time in zip(bars, times):
     plt.text(bar.get_x() + bar.get_width() / 2, time + 0.05, str(time) + " seconds", ha='center', va='bottom')
 
 # Display the graph
+plt.savefig("graph.png")
 plt.show()
