@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 # Initialize empty lists to store data
 indices = []
 times = []
-colors = ['red', 'blue', 'green']
+tempColors = ['red', 'blue', 'green']
 intSched = ['OTHERS', 'FIFO', 'RR']
 temp_index = [0, 1, 2]
 #RED FOR OTHERS
@@ -23,7 +23,9 @@ with open('output.txt', 'r') as file:
 plt.ylim(0, 4)
 plt.yticks([i * 0.1 for i in range(41)])
 
-categories = [intSched[i] for i in temp_index]
+categories = [intSched[i] for i in indices]
+colors = [tempColors[i] for i in indices]
+
 
 # Create a bar graph
 bars = plt.bar(temp_index, times, align='center', alpha=0.7, color=colors)
