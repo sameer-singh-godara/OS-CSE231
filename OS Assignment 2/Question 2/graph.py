@@ -19,9 +19,11 @@ with open('output.txt', 'r') as file:
             indices.append(index)
             times.append(time)
 
+lastTime = (int)(times[2]+1)
+
 # Set the scale and limit for the y-axis
-plt.ylim(0, 4)
-plt.yticks([i * 0.1 for i in range(41)])
+plt.ylim(0, lastTime)
+plt.yticks([i * 0.1 for i in range(lastTime*10 + 1)])
 
 categories = [intSched[i] for i in indices]
 colors = [tempColors[i] for i in indices]
