@@ -38,7 +38,7 @@ int main ()
             param.sched_priority = 0;
             policies[SCHED_OTHER] = SCHED_OTHER;
             
-            int check_sched_set = sched_setscheduler(0, SCHED_OTHER, &param);
+            int check_sched_set = sched_setscheduler(getpid(), SCHED_OTHER, &param);
             if (check_sched_set == -1){
                 perror("sched_scheduler error in process 1\n");
                 exit(1);
@@ -78,7 +78,7 @@ int main ()
                 param.sched_priority = 1;
                 policies[SCHED_RR] = SCHED_RR;
 
-                int check_sched_set = sched_setscheduler(0, SCHED_RR, &param);
+                int check_sched_set = sched_setscheduler(getpid(), SCHED_RR, &param);
                 if (check_sched_set == -1){
                     perror("sched_scheduler error in process 2\n");
                     exit(1);
@@ -117,7 +117,7 @@ int main ()
                     param.sched_priority = 1;
     
                     policies[SCHED_FIFO] = SCHED_FIFO;
-                    int check_sched_set = sched_setscheduler(0, SCHED_FIFO, &param);
+                    int check_sched_set = sched_setscheduler(getpid(), SCHED_FIFO, &param);
                     if (check_sched_set == -1){
                         perror("sched_scheduler error in process 3\n");
                         exit(1);
