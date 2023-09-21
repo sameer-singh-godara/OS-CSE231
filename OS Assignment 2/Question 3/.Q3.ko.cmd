@@ -1,0 +1,1 @@
+cmd_/home/sachin/Documents/OS_ASSIGNMENT_02/Question_03/Q3.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/sachin/Documents/OS_ASSIGNMENT_02/Question_03/Q3.ko /home/sachin/Documents/OS_ASSIGNMENT_02/Question_03/Q3.o /home/sachin/Documents/OS_ASSIGNMENT_02/Question_03/Q3.mod.o;  true
