@@ -124,7 +124,7 @@ void totalPassenger(){
 
 void travelledPassenger(){
     int count = 0;
-    for (int i = 0; i < total_passengers_boarded_from_starting; i++){
+    for (int i = 0; i <= total_passengers_boarded_from_starting; i++){
         count++;
     }
 }

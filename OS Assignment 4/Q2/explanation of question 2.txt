@@ -1,0 +1,43 @@
+Header Files:
+The code includes standard C libraries for input/output (stdio.h), threading (pthread.h), semaphores (semaphore.h), and unistd.h for the sleep function.
+
+Macro Definition:
+MAX_PASSENGERS is defined as 1000, representing the maximum number of passengers.
+
+Global Variables:
+Various global variables are declared to track information about passengers, the car, and synchronization between threads.
+
+Semaphores:
+Four semaphores (semaphore_mutex, boardingQueue, rideInProgress, unboardingQueue) are declared for synchronization between the car and passengers.
+
+Car Thread (car function):
+An infinite loop simulates the car's behavior: loading passengers, signaling them to board, waiting for them to board, simulating a ride, unloading passengers, signaling them to unboard, and waiting for them to unboard.
+
+Passenger Thread (passenger function):
+An infinite loop simulates the passenger's behavior: waiting for the car to be ready, boarding the car, signaling that it has boarded, waiting for the ride to finish, unboarding, and signaling that it has unboarded.
+
+Loading and Unloading Functions:
+load and unload functions simulate the loading and unloading processes of the car, respectively.
+
+Boarding and Unboarding Functions:
+board and offboard functions simulate a passenger boarding and unboarding the car, respectively.
+
+Total Passenger Functions:
+totalPassenger function prints the total number of passengers that have traveled.
+
+Main Function:
+User inputs the total number of passengers and car capacity.
+If the car's capacity is greater than or equal to the total passengers, an error message is displayed, and the program exits.
+Semaphores are initialized.
+The car thread is created, and a success message is printed.
+Passenger threads are created, each with a unique ID.
+Threads are joined to the main thread for synchronization.
+Semaphores are destroyed before the program exits.
+
+Explanation of Print Statements:
+Various printf statements are used to display messages indicating loading, unloading, boarding, and unboarding actions, as well as the progress of the ride.
+Sleep Function:
+sleep is used to simulate time passing during loading, unloading, and the ride.
+
+Error Check for Capacity and Passengers:
+The program checks if the car's capacity is greater than or equal to the total number of passengers and exits with an error message if true.
