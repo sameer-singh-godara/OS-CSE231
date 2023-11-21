@@ -1,0 +1,10 @@
+why deadlock will occur?
+A deadlock is a situation in computing where two or more processes cannot proceed because each is waiting for the other to release a resource. In other words, it's a state where a set of processes are blocked because each process is holding a resource and waiting for another resource acquired by some other process.
+Here in This case deadlock will occur every philosopher will hold a single fork and waiting for another philosopher to eat something present in the bowl.
+
+
+how can we solve this problem?
+1) remove 1 philosopher which will lead to free the fork so that the chain will break and deadlock will be removed, but this is not the practicle way; so we will try the next method.
+2) we can limit only one philosopher can pick up the forks at a time, which will not lead to deadlock, the philosopher who is picking up the forks is sure that he will eat the food present in the bowl.
+3) we can change the order of picking the fork of last philosopher, in this condition if deadlock is about to form then at last stage the philosopher will not be able to take the fork hence there will be one fork remaining so that other philosopher can eat and then chain of deadlock will be broken.
+
