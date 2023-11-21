@@ -26,3 +26,6 @@ Mutexes and Condition Variables: Mutexes (forks_mutex, bowls_mutex, masterlock, 
 Philosopher Threads Creation: It creates threads for each philosopher, passing their IDs as arguments to the philosopher function.
 
 Joining Threads: The program waits for all philosopher threads to finish before exiting.
+
+
+we were getting random results so we are also attaching images for proof
