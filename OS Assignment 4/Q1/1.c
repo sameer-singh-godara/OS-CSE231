@@ -19,30 +19,53 @@ void philosopher(void* args) {
     int philosopher_id = *(int*)args;
     
     while (1){
-        thinking(philosopher_id);
-        pthread_mutex_lock(&masterlock);
-        int left_fork = philosopher_id;
-        int right_fork = (philosopher_id + 1) % NUM_PHILOSOPHERS;
+        if (philosopher_id < NUM_PHILOSOPHERS -1){
+            thinking(philosopher_id);
+            pthread_mutex_lock(&masterlock);
+            int left_fork = philosopher_id;
+            int right_fork = (philosopher_id + 1) % NUM_PHILOSOPHERS;
 
-        pthread_mutex_lock(&forks[left_fork]);
-        pthread_mutex_lock(&forks[right_fork]);
-        while (pthread_mutex_trylock(&bowls_mutex1) != 0 && pthread_mutex_trylock(&bowls_mutex2) != 0){
-            pthread_cond_wait(&bowls_cond, &masterlock);
-        }
-        pthread_mutex_unlock(&masterlock);
+            pthread_mutex_lock(&forks[left_fork]);
+            pthread_mutex_lock(&forks[right_fork]);
+            while (pthread_mutex_trylock(&bowls_mutex1) != 0 && pthread_mutex_trylock(&bowls_mutex2) != 0){
+                pthread_cond_wait(&bowls_cond, &masterlock);
+            }
+            pthread_mutex_unlock(&masterlock);
 
-        eating(philosopher_id);
+            eating(philosopher_id);
 
-        pthread_mutex_unlock(&bowls_mutex1);
-        pthread_mutex_unlock(&bowls_mutex2);
-    
-        pthread_mutex_unlock(&forks[left_fork]);
-        pthread_mutex_unlock(&forks[right_fork]);
+            pthread_mutex_unlock(&bowls_mutex1);
+            pthread_mutex_unlock(&bowls_mutex2);
         
-        pthread_cond_signal(&bowls_cond);
+            pthread_mutex_unlock(&forks[left_fork]);
+            pthread_mutex_unlock(&forks[right_fork]);
+            
+            pthread_cond_signal(&bowls_cond);
+        }
+        else {
+            thinking(philosopher_id);
+            pthread_mutex_lock(&masterlock);
+            int left_fork = philosopher_id;
+            int right_fork = (philosopher_id + 1) % NUM_PHILOSOPHERS;
 
+            pthread_mutex_lock(&forks[right_fork]);
+            pthread_mutex_lock(&forks[left_fork]);
+            while (pthread_mutex_trylock(&bowls_mutex1) != 0 && pthread_mutex_trylock(&bowls_mutex2) != 0){
+                pthread_cond_wait(&bowls_cond, &masterlock);
+            }
+            pthread_mutex_unlock(&masterlock);
 
-        // thinking(philosopher_id);
+            eating(philosopher_id);
+
+            pthread_mutex_unlock(&bowls_mutex1);
+            pthread_mutex_unlock(&bowls_mutex2);
+        
+            pthread_mutex_unlock(&forks[right_fork]);
+            pthread_mutex_unlock(&forks[left_fork]);
+            
+            pthread_cond_signal(&bowls_cond);
+        }
+
     }
 }
 
