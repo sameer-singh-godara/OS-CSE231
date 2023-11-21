@@ -10,7 +10,10 @@ int capacity;
 int passengers_on_board = 0;
 int total_passengers_boarded_from_starting = 0;
 int total_passengers_unboarded_from_starting = 0;
-sem_t semaphore_mutex, boardingQueue, rideInProgress, unboardingQueue;
+sem_t semaphore_mutex;
+sem_t boardingQueue;
+sem_t rideInProgress;
+sem_t unboardingQueue;
 
 
 void* car(void* args) {
@@ -70,6 +73,8 @@ void* passenger(void* args) {
     int passenger_id = *((int*)args);
 
     while (1) {
+        passengerID(passenger_id);
+
         sem_wait(&boardingQueue);// Wait for the car to be ready for boarding
         board(passenger_id);// Boarding the car     
 
@@ -79,9 +84,16 @@ void* passenger(void* args) {
         offboard(passenger_id);// Unboarding the car                     
 
         sem_post(&rideInProgress);// Signal car that passenger has unboarded
+
+        passengerID(passenger_id);
     }
 
     return NULL;
+}
+
+
+void passengerID(int id){
+    //printf("passenger id is %d\n", id);
 }
 
 
