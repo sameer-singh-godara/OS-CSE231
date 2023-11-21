@@ -5,42 +5,38 @@
 
 #define MAX_CARS 1000
 
-sem_t left_sem, right_sem, mutex;
+sem_t bridge_sem, mutex;
 int left_count = 0, right_count = 0;
-pthread_mutex_t lock;
 
 void passing(int dir, int car_number) {
     if (dir == 0) {
+        sem_wait(&bridge_sem);
         printf("Car from left side with ID %d is crossing the bridge.\n", car_number);
-    } else {
-        printf("Car from right side with ID %d is crossing the bridge.\n", car_number);
-    }
-    sleep(1);  // Simulating the time it takes to cross the bridge
-    if (dir == 0) {
+        sleep(1);  
         printf("Car from left side with ID %d crossed the bridge.\n", car_number);
+        sem_post(&bridge_sem);
     } else {
+        sem_wait(&bridge_sem);
+        printf("Car from right side with ID %d is crossing the bridge.\n", car_number);
+        sleep(1);  
         printf("Car from right side with ID %d crossed the bridge.\n", car_number);
+        sem_post(&bridge_sem);
     }
 }
 
 void* left(void* args) {
     int car_number = *((int*)args);
 
-    //sem_wait(&mutex);
-    if (left_count == 0 && right_count == 0) {
-        //sem_post(&left_sem);
-    }
-    left_count++;
     sem_wait(&mutex);
-
-    sem_wait(&left_sem);
-    passing(0, car_number);
-    sem_post(&left_sem);
-
+    left_count++;
     sem_post(&mutex);
+
+    passing(0, car_number);
+
+    sem_wait(&mutex);
     left_count--;
     if (left_count == 0 && right_count > 0) {
-        sem_post(&right_sem);
+        sem_post(&bridge_sem);
     }
     sem_post(&mutex);
 
@@ -51,20 +47,15 @@ void* right(void* args) {
     int car_number = *((int*)args);
 
     sem_wait(&mutex);
-    if (right_count == 0 && left_count == 0) {
-        sem_post(&right_sem);
-    }
     right_count++;
     sem_post(&mutex);
 
-    sem_wait(&right_sem);
     passing(1, car_number);
-    sem_post(&right_sem);
 
     sem_wait(&mutex);
     right_count--;
     if (right_count == 0 && left_count > 0) {
-        sem_post(&left_sem);
+        sem_post(&bridge_sem);
     }
     sem_post(&mutex);
 
@@ -73,8 +64,7 @@ void* right(void* args) {
 
 int main() {
     pthread_t threads[MAX_CARS * 2];
-    sem_init(&left_sem, 0, 5);
-    sem_init(&right_sem, 0, 5);
+    sem_init(&bridge_sem, 0, 5);  
     sem_init(&mutex, 0, 1);
 
     int car_numbers[2*MAX_CARS];
@@ -89,7 +79,6 @@ int main() {
     for (int i = 0; i < left_cars; ++i) {
         car_numbers[i] = i + 1;
         pthread_create(&threads[i], NULL, left, &car_numbers[i]);
-        // sleep(2);
     }
     for (int i = 0; i < left_cars ; ++i) {
         pthread_join(threads[i], NULL);
@@ -97,16 +86,13 @@ int main() {
     for (int i = 0; i < right_cars; ++i) {
         car_numbers[i + left_cars] = i + 1;
         pthread_create(&threads[i + left_cars], NULL, right, &car_numbers[i + left_cars]);
-        // sleep(2);
     }
-    
-for (int i = 0; i < right_cars ; ++i) {
-        pthread_join(threads[i], NULL);
-    }
-   
 
-    sem_destroy(&left_sem);
-    sem_destroy(&right_sem);
+    for (int i = 0; i < right_cars ; ++i) {
+        pthread_join(threads[i + left_cars], NULL);
+    }
+
+    sem_destroy(&bridge_sem);
     sem_destroy(&mutex);
 
     return 0;

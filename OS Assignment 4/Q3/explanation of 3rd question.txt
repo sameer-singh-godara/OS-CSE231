@@ -1,0 +1,34 @@
+Functions:
+
+1. passing(int dir, int car_number):
+
+Simulates a car crossing the bridge from the specified direction (0 for left, 1 for right).
+Uses the bridge_sem semaphore to control access to the bridge.
+Prints messages indicating when a car is crossing and when it has crossed.
+
+2. left(void args):*
+
+Represents a thread simulating a car from the left side.
+Increments the left_count to track the number of cars on the left side.
+Calls the passing function and updates counts accordingly.
+Uses the mutex semaphore to protect critical sections.
+
+3. right(void args):*
+
+Represents a thread simulating a car from the right side.
+Increments the right_count to track the number of cars on the right side.
+Calls the passing function and updates counts accordingly.
+Uses the mutex semaphore to protect critical sections.
+
+4. main():
+
+Initializes semaphores and arrays for thread creation.
+Takes input for the number of cars on the left and right sides.
+Creates threads for cars from the left and right sides.
+Waits for all threads to finish using pthread_join.
+Destroys semaphores.
+
+Semaphore Usage as bridge_sem is Controls access to the bridge, ensuring that only a limited number of cars can cross simultaneously (5 in this case).
+Semaphore Usage as mutex is Protects critical sections where left_count and right_count are updated, ensuring correct synchronization.
+
+This C program simulates a scenario where cars from the left and right sides of a bridge need to cross the bridge. The program uses pthreads for concurrent execution and semaphores for synchronization to ensure that cars do not collide while crossing the bridge.

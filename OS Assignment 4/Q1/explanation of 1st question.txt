@@ -8,3 +8,21 @@ how can we solve this problem?
 2) we can limit only one philosopher can pick up the forks at a time, which will not lead to deadlock, the philosopher who is picking up the forks is sure that he will eat the food present in the bowl.
 3) we can change the order of picking the fork of last philosopher, in this condition if deadlock is about to form then at last stage the philosopher will not be able to take the fork hence there will be one fork remaining so that other philosopher can eat and then chain of deadlock will be broken.
 
+
+
+
+Initialization: The program starts by including necessary header files, defining constants for the number of philosophers, forks, and bowls. It also initializes mutexes and condition variables.
+
+Philosopher Function: The philosopher function represents the behavior of a philosopher thread. Each philosopher goes through a cycle of thinking, picking up forks, eating, and putting down forks.
+
+Thinking Function: The thinking function simulates the philosopher thinking by printing a message and sleeping for 1 second.
+
+Eating Function: The eating function simulates the philosopher eating. The commented-out code suggests an attempt to implement a solution where philosophers contend for two bowls using mutexes and a condition variable. However, it seems like this part is incomplete and may not work correctly.
+
+Main Function: In the main function, it initializes mutexes and condition variables, creates threads for each philosopher, and waits for the threads to finish.
+
+Mutexes and Condition Variables: Mutexes (forks_mutex, bowls_mutex, masterlock, bowls_mutex1, bowls_mutex2) are used to control access to shared resources (forks, bowls), preventing multiple philosophers from accessing them simultaneously. The bowls_cond condition variable is used for synchronization when philosophers contend for bowls.
+
+Philosopher Threads Creation: It creates threads for each philosopher, passing their IDs as arguments to the philosopher function.
+
+Joining Threads: The program waits for all philosopher threads to finish before exiting.
